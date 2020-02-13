@@ -1,9 +1,9 @@
 #!/bin/bash
 # manually kill the iguana you need to restart first!
 # unlock any locked utxos. This will unlock utxos for both iguans, need a filter for address to only unlock the pubkey you need to restart. 
-komodo-cli lockunspent true `komodo-cli listlockunspent | jq -c .` 
+komodo-cli lockunspent true `komodo-cli listlockunspent | jq -c .`
 
-# Start normally, no split is default on this branch. 
+# Start normally, no split is default on this branch.
 stdbuf -oL $1 ../agents/iguana notary & #> iguana.log 2> error.log  &
 
 myip=`curl -s4 checkip.amazonaws.com`
@@ -13,7 +13,7 @@ sleep 4
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"SuperNET\",\"method\":\"myipaddr\",\"ipaddr\":\"$myip\"}"
 sleep 3
 
-# TODO: Need to get some seeds for both networks. 
+# TODO: Need to get some seeds for both networks.
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"178.128.93.117\"}"   # lukechilds_AR
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"67.207.94.69\"}"     # lukechilds_NA
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"64.120.113.130\"}"   # cipi_AR
@@ -30,6 +30,8 @@ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"ad
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"139.99.144.114\"}" # pungocloud_SH 
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"141.98.206.10\"}" # indenodes_ae
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"50.97.40.89\"}" # indenodes_sh
+curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"addnotary\",\"ipaddr\":\"178.63.53.110\"}"
+178.63.53.110
 
 # This will add all KMD assetchains from assetchains.json.
 ./add_coins
@@ -37,8 +39,8 @@ curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"ad
 sleep 30
 # dpow for KMD-> BTC.
 curl --url "http://127.0.0.1:7776" --data "{\"agent\":\"iguana\",\"method\":\"dpow\",\"symbol\":\"KMD\",\"pubkey\":\"$pubkey\"}"
- 
+
 echo Launching dPoW for ACs
-sleep 20
+sleep 40
 # dpow for ACs
 ./dpowassets
